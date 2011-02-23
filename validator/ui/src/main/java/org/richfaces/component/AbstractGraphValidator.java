@@ -20,19 +20,15 @@
  */
 package org.richfaces.component;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.EditableValueHolder;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
@@ -51,7 +47,7 @@ import org.richfaces.validator.GraphValidatorState;
  * JSF component class
  * 
  */
-@JsfComponent(tag=@Tag(name="graphValidator",type=TagType.Facelets))
+@JsfComponent(tag=@Tag(name="graphValidator",type=TagType.Facelets, handler = "org.richfaces.view.facelets.html.GraphValidatorHandler"))
 public abstract class AbstractGraphValidator extends UIComponentBase {
 
     public static final String COMPONENT_TYPE = "org.richfaces.GraphValidator";
@@ -231,9 +227,7 @@ public abstract class AbstractGraphValidator extends UIComponentBase {
         }
     }
 
-    @Override
-    public void encodeBegin(FacesContext context) throws IOException {
-        super.encodeBegin(context);
+    public Validator createChildrenValidator(FacesContext context) {
         FacesBeanValidator validator = (FacesBeanValidator) context.getApplication().createValidator(getType());
         validator.setSummary(getSummary());
         ValueExpression expression = getValueExpression("groups");
@@ -242,48 +236,7 @@ public abstract class AbstractGraphValidator extends UIComponentBase {
         } else {
             validator.setGroups(getGroups());
         }
-        setupValidators(this, validator);
+        return validator;
     }
-
-    @Override
-    public void encodeChildren(FacesContext context) throws IOException {
-        if (isRendered()) {
-            for (UIComponent child : getChildren()) {
-                if (child.isRendered()) {
-                    child.encodeAll(context);
-                }
-            }
-        }
-    }
-
-    private void setupValidators(UIComponent component, Validator validator) {
-        Iterator<UIComponent> facetsAndChildren = component.getFacetsAndChildren();
-        while (facetsAndChildren.hasNext()) {
-            UIComponent child = facetsAndChildren.next();
-            if (child instanceof EditableValueHolder) {
-                EditableValueHolder input = (EditableValueHolder) child;
-                setupValidator(input, validator);
-            }
-            setupValidators(child, validator);
-        }
-    }
-
-    /**
-     * @param input
-     */
-    private void setupValidator(EditableValueHolder input, Validator validator) {
-        Validator[] validators = input.getValidators();
-        for (int i = 0; i < validators.length; i++) {
-            if (validators[i].getClass().equals(validator.getClass())) {
-                return;
-            }
-        }
-        input.addValidator(validator);
-    }
-
-    @Override
-    public boolean getRendersChildren() {
-        return true;
-    }
-
+    
 }
