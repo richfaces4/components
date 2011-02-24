@@ -413,9 +413,6 @@ public abstract class AbstractTogglePanel extends UIOutput implements AbstractDi
         if (isImmediate() || (event.getNewItem() != null &&
             RendererUtils.getInstance().isBooleanAttribute(event.getNewItem(), "immediate"))) {
             event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-        } else if (isBypassUpdates() || (event.getNewItem() != null &&
-            RendererUtils.getInstance().isBooleanAttribute(event.getNewItem(), "bypassUpdates"))) {
-            event.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
         } else {
             event.setPhaseId(PhaseId.INVOKE_APPLICATION);
         }
@@ -424,8 +421,6 @@ public abstract class AbstractTogglePanel extends UIOutput implements AbstractDi
     protected void setEventPhase(FacesEvent event) {
         if (isImmediate()) {
             event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
-        } else if (isBypassUpdates()) {
-            event.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
         } else {
             event.setPhaseId(PhaseId.INVOKE_APPLICATION);
         }
@@ -617,9 +612,6 @@ public abstract class AbstractTogglePanel extends UIOutput implements AbstractDi
     public void setSwitchType(SwitchType switchType) {
         getStateHelper().put(PropertyKeys.switchType, switchType);
     }
-
-    @Attribute
-    public abstract boolean isBypassUpdates();
 
     @Attribute(hidden = true)
     public abstract boolean isLimitRender();

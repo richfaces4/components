@@ -213,9 +213,7 @@ public abstract class AbstractCollapsiblePanel extends AbstractTogglePanel imple
     @Override
     public void broadcast(FacesEvent event) throws AbortProcessingException {
         super.broadcast(event);
-
-        if (event instanceof PanelToggleEvent
-            && (isBypassUpdates() || isImmediate())) {
+        if (event instanceof PanelToggleEvent && isImmediate()) {
             FacesContext.getCurrentInstance().renderResponse();
         }
     }
