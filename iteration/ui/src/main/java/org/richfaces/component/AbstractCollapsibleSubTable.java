@@ -28,6 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 
+import org.richfaces.StateHolderList;
 import org.richfaces.cdk.annotations.Attribute;
 import org.richfaces.cdk.annotations.JsfComponent;
 import org.richfaces.cdk.annotations.JsfRenderer;
@@ -141,10 +142,11 @@ public abstract class AbstractCollapsibleSubTable extends UIDataTableBase implem
     }
     
     public void setIterationState(Object stateObject) {
-        Object[] state = (Object[]) stateObject;
-        if (state != null) {
-            super.setIterationState(state[0]);
-            getStateHelper().put(PropertyKeys.expanded, state[1]);
+        StateHolderList stateHolderList = (StateHolderList) stateObject;
+        
+        if (stateHolderList != null && !stateHolderList.isEmpty()) {
+            super.setIterationState(stateHolderList.get(0));
+            getStateHelper().put(PropertyKeys.expanded, (Boolean) stateHolderList.get(1));
         } else {
             super.setIterationState(null);
             getStateHelper().put(PropertyKeys.expanded, null);
@@ -152,9 +154,11 @@ public abstract class AbstractCollapsibleSubTable extends UIDataTableBase implem
     }
     
     public Object getIterationState() {
-        Object [] state = new Object[2];
-        state[0] = super.getIterationState();
-        state[1] = getStateHelper().get(PropertyKeys.expanded); 
-        return state;
+        StateHolderList holderList = new StateHolderList();
+        
+        holderList.add(super.getIterationState());
+        holderList.add(getStateHelper().get(PropertyKeys.expanded));
+        
+        return holderList;
     }
 }
