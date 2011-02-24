@@ -21,10 +21,8 @@
  */
 package org.richfaces.view.facelets;
 
-import java.io.Serializable;
-
 import javax.el.MethodExpression;
-import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.view.facelets.ComponentConfig;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
@@ -35,8 +33,9 @@ import javax.faces.view.facelets.MetadataTarget;
 import javax.faces.view.facelets.TagAttribute;
 
 import org.richfaces.component.AbstractFileUpload;
-import org.richfaces.event.FileUploadListener;
 import org.richfaces.event.FileUploadEvent;
+import org.richfaces.event.FileUploadListener;
+import org.richfaces.event.MethodExpressionEventListener;
 
 /**
  * @author Konstantin Mishin
@@ -44,17 +43,18 @@ import org.richfaces.event.FileUploadEvent;
  */
 public class FileUploadHandler extends ComponentHandler {
 
-    public static final class FileUploadListenerImpl implements FileUploadListener, Serializable {
+    public static final class FileUploadListenerImpl extends MethodExpressionEventListener implements FileUploadListener {
         
-        private static final long serialVersionUID = -3824721864533652683L;
-        private MethodExpression expression;
-
-        public FileUploadListenerImpl(MethodExpression expression) {
-            this.expression = expression;
+        public FileUploadListenerImpl() {
+            super();
         }
 
-        public void processUpload(FileUploadEvent event) {
-            expression.invoke(FacesContext.getCurrentInstance().getELContext(), new Object[] {event});
+        public FileUploadListenerImpl(MethodExpression expression) {
+            super(expression);
+        }
+
+        public void processUpload(FileUploadEvent event) throws AbortProcessingException {
+            processEvent(event);
         }
     }
 
