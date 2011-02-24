@@ -21,7 +21,10 @@
  */
 package org.richfaces.view.facelets;
 
+import java.io.Serializable;
+
 import javax.el.MethodExpression;
+import javax.faces.context.FacesContext;
 import javax.faces.view.facelets.ComponentConfig;
 import javax.faces.view.facelets.ComponentHandler;
 import javax.faces.view.facelets.FaceletContext;
@@ -41,6 +44,20 @@ import org.richfaces.event.FileUploadEvent;
  */
 public class FileUploadHandler extends ComponentHandler {
 
+    public static final class FileUploadListenerImpl implements FileUploadListener, Serializable {
+        
+        private static final long serialVersionUID = -3824721864533652683L;
+        private MethodExpression expression;
+
+        public FileUploadListenerImpl(MethodExpression expression) {
+            this.expression = expression;
+        }
+
+        public void processUpload(FileUploadEvent event) {
+            expression.invoke(FacesContext.getCurrentInstance().getELContext(), new Object[] {event});
+        }
+    }
+
     public FileUploadHandler(ComponentConfig config) {
         super(config);
     }
@@ -58,11 +75,7 @@ public class FileUploadHandler extends ComponentHandler {
                             @Override
                             public void applyMetadata(final FaceletContext ctx, Object instance) {
                                 final MethodExpression expression = getMethodExpression(ctx);
-                                ((AbstractFileUpload) instance).addFileUploadListener(new FileUploadListener(){
-                                    public void processUpload(FileUploadEvent event) {
-                                        expression.invoke(ctx.getFacesContext().getELContext(), new Object[] {event});
-                                    }
-                                });
+                                ((AbstractFileUpload) instance).addFileUploadListener(new FileUploadListenerImpl(expression));
                             }
                         };
                     }
