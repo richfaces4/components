@@ -85,6 +85,9 @@ public abstract class AbstractAutocomplete extends UIInput implements MetaCompon
     
     @Attribute()
     public abstract String getPopupClass();
+    
+    @Attribute()
+    public abstract String getInputClass();
 
     @Attribute
     public abstract AutocompleteMode getMode();
