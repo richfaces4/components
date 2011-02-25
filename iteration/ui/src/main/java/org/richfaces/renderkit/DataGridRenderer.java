@@ -23,6 +23,7 @@
 package org.richfaces.renderkit;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.ResourceDependencies;
@@ -240,8 +241,10 @@ public class DataGridRenderer extends AbstractRowsRenderer implements MetaCompon
         AbstractDataGrid dataGrid = (AbstractDataGrid)component;
         writer.startElement(HtmlConstants.TABLE_ELEMENT, dataGrid);
         writer.writeAttribute(HtmlConstants.ID_ATTRIBUTE, dataGrid.getClientId(facesContext), null);
-        writer.writeAttribute(HtmlConstants.CLASS_ATTRIBUTE, "rf-dg", null);
-
+        Map<String, Object> attributes = dataGrid.getAttributes();
+        String classes = concatClasses("rf-dg", attributes.get(HtmlConstants.STYLE_CLASS_ATTR));
+        writer.writeAttribute(HtmlConstants.CLASS_ATTRIBUTE, classes, null);
+        RenderKitUtils.renderAttribute(facesContext, "style", attributes.get(HtmlConstants.STYLE_ATTRIBUTE));
         encodeCaption(writer, facesContext, dataGrid);
         encodeHeader(writer, facesContext, dataGrid, false);
         encodeFooter(writer, facesContext, dataGrid, false);
