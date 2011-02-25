@@ -271,7 +271,7 @@ public abstract class AutocompleteRendererBase extends InputRendererBase impleme
             return;
         }
         Map<String, String> requestParameters = context.getExternalContext().getRequestParameterMap();
-        String value = requestParameters.get(component.getClientId(context) + "Value");
+        String value = requestParameters.get(component.getClientId(context) + "Input");
         if (value != null) {
             autocomplete.setSubmittedValue(value);
         }
