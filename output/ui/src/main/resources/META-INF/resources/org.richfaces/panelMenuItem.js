@@ -203,7 +203,7 @@
          * @return {void} TODO ...
          */
         select: function () {
-            var continueProcess = this.__fireBeforeSelect();
+            var continueProcess = this.__fireEvent("beforeSelect");
             if (!continueProcess) {
                 return false;
             }
@@ -300,13 +300,7 @@
         __unselect: function () {
             this.__header().removeClass(this.selectionClass);
         },
-
-        __fireBeforeSelect : function () {
-            return rf.Event.fireById(this.id, "beforeselect", {
-                item: this
-            });
-        },
-
+        
         __fireSelect : function () {
             return rf.Event.fireById(this.id, "select", {
                 item: this
@@ -317,6 +311,10 @@
             return rf.Event.fireById(this.id, "unselect", {
                 item: this
             });
+        },
+        
+        __fireEvent : function (eventType, event) {
+        	return this.invokeEvent(eventType, rf.getDomElement(this.id), event, {id: this.id, item: this});
         },
 
         /**
