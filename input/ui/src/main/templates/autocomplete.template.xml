@@ -30,7 +30,7 @@
 				onkeyup="#{component.attributes['onkeyup']}"
 				onkeydown="#{component.attributes['onkeydown']}"
 				onkeypress="#{component.attributes['onkeypress']}"
-				id="#{clientId}Input" value="#{component.attributes['value']}"
+				id="#{clientId}Input" value="#{getInputValue(facesContext, component)}"
 				disabled="#{disabled}" name="#{clientId}Input"
 				type="text"
 				class="rf-au-fnt rf-au-inp #{component.attributes['inputClass']}"

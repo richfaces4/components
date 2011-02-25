@@ -21,7 +21,10 @@
  */
 package org.richfaces.component;
 
-import java.io.IOException;
+import org.richfaces.cdk.annotations.*;
+import org.richfaces.context.ExtendedVisitContext;
+import org.richfaces.context.ExtendedVisitContextMode;
+import org.richfaces.renderkit.MetaComponentRenderer;
 
 import javax.el.MethodExpression;
 import javax.faces.component.UIComponent;
@@ -30,18 +33,7 @@ import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-
-import org.richfaces.cdk.annotations.Attribute;
-import org.richfaces.cdk.annotations.EventName;
-import org.richfaces.cdk.annotations.JsfComponent;
-import org.richfaces.cdk.annotations.JsfRenderer;
-import org.richfaces.cdk.annotations.Signature;
-import org.richfaces.cdk.annotations.Tag;
-import org.richfaces.cdk.annotations.TagType;
-import org.richfaces.context.ExtendedVisitContext;
-import org.richfaces.context.ExtendedVisitContextMode;
-import org.richfaces.renderkit.MetaComponentRenderer;
+import java.io.IOException;
 
 /**
  * @author Nick Belaevski
@@ -64,8 +56,6 @@ public abstract class AbstractAutocomplete extends UIInput implements MetaCompon
     public abstract MethodExpression getAutocompleteMethod();
 
     public abstract void setAutocompleteMethod(MethodExpression expression);
-
-    public abstract void setItemConverter(Converter converter);
 
     @Attribute(literal = true)
     public abstract String getVar();
@@ -97,9 +87,6 @@ public abstract class AbstractAutocomplete extends UIInput implements MetaCompon
     
     @Attribute
     public abstract String getTokens();
-
-    @Attribute
-    public abstract Converter getItemConverter();
 
     @Attribute(defaultValue = "true")
     public abstract boolean isAutofill();
