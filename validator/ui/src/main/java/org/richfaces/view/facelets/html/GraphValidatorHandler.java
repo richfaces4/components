@@ -27,8 +27,13 @@ import java.util.Iterator;
 import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.component.EditableValueHolder;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ComponentSystemEvent;
+import javax.faces.event.ComponentSystemEventListener;
+import javax.faces.event.PostAddToViewEvent;
 import javax.faces.validator.BeanValidator;
 import javax.faces.validator.Validator;
 import javax.faces.view.facelets.ComponentConfig;
@@ -45,6 +50,31 @@ public class GraphValidatorHandler extends ComponentHandler {
 
     private static final String BUILT_IN_BEAN_VALIDATOR_ATTRIBUTE_NAME = GraphValidatorHandler.class.getName() 
         + ":BUILT_IN_BEAN_VALIDATOR_ATTRIBUTE_NAME";
+    
+    private class FacesBeanValidatorAddListener implements ComponentSystemEventListener, StateHolder {
+
+        public void processEvent(ComponentSystemEvent event) throws AbortProcessingException {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Validator childrenValidator = createChildrenValidator(context, event.getComponent());
+            setupValidators(context, event.getComponent(), childrenValidator);
+        }
+
+        public Object saveState(FacesContext context) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void restoreState(FacesContext context, Object state) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean isTransient() {
+            return true;
+        }
+
+        public void setTransient(boolean newTransientValue) {
+            throw new UnsupportedOperationException();
+        }
+    }
     
     public GraphValidatorHandler(ComponentConfig config) {
         super(config);
@@ -113,13 +143,20 @@ public class GraphValidatorHandler extends ComponentHandler {
         }
     }
 
+    private Validator createChildrenValidator(FacesContext context, UIComponent c) {
+        AbstractGraphValidator graphValidator = (AbstractGraphValidator) c;
+        
+        return graphValidator.createChildrenValidator(context);
+    } 
+    
     @Override
     public void applyNextHandler(FaceletContext ctx, UIComponent c) throws IOException, FacesException, ELException {
         super.applyNextHandler(ctx, c);
         
-        AbstractGraphValidator graphValidator = (AbstractGraphValidator) c;
-        Validator childrenValidator = graphValidator.createChildrenValidator(ctx.getFacesContext());
-        
-        setupValidators(ctx.getFacesContext(), graphValidator, childrenValidator);
+        if (c.isInView()) {
+            setupValidators(ctx.getFacesContext(), c, createChildrenValidator(ctx.getFacesContext(), c));
+        } else {
+            c.subscribeToEvent(PostAddToViewEvent.class, new FacesBeanValidatorAddListener());
+        }
     }
 }
