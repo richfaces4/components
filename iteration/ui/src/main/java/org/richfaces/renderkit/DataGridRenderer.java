@@ -288,14 +288,12 @@ public class DataGridRenderer extends AbstractRowsRenderer implements MetaCompon
         int columns = dataGrid.getColumns();
         int rest = columns - cell;
         
-        if(rest != 0) {
-            for (int i = 0; i < rest; i++) {
-                writer.startElement(HtmlConstants.TD_ELEM, dataGrid);
-                writer.writeAttribute(HtmlConstants.CLASS_ATTRIBUTE, "rf-dg-c", null);
-                writer.endElement(HtmlConstants.TD_ELEM);
-            }
-            writer.endElement(HtmlConstants.TR_ELEMENT);
+        for (int i = 0; i < rest; i++) {
+            writer.startElement(HtmlConstants.TD_ELEM, dataGrid);
+            writer.writeAttribute(HtmlConstants.CLASS_ATTRIBUTE, "rf-dg-c", null);
+            writer.endElement(HtmlConstants.TD_ELEM);
         }
+        writer.endElement(HtmlConstants.TR_ELEMENT);
     }
     
     public DataVisitResult process(FacesContext facesContext, Object rowKey, Object argument) {
