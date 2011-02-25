@@ -52,6 +52,12 @@ public abstract class AbstractAccordion extends AbstractTogglePanel {
         String res = super.getActiveItem();
         if (res == null) {
             res = getFirstItem().getName();
+        } else {
+            AbstractTogglePanelTitledItem item =
+                    (AbstractTogglePanelTitledItem) super.getItemByIndex(super.getChildIndex(res));
+            if (item.isDisabled()) {
+                res = getFirstItem().getName();
+            }
         }
         return res;
     }
