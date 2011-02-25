@@ -161,10 +161,6 @@
             // todo move it
             this.selectionClass = this.options.stylePrefix + "-sel";
 
-            if (panelMenu.__isActiveItem(this)) {
-            	rootElt.ready($.proxy(this.__restoreSelection, this));
-            }
-            
             if (!this.options.disabled) {
                 var item = this;
 
@@ -291,11 +287,6 @@
 
         __header : function () {
             return this.__item();
-        },
-
-        __restoreSelection: function() {
-        	this.__select();
-        	//this.__fireSelect();
         },
         
         __isSelected: function() {
