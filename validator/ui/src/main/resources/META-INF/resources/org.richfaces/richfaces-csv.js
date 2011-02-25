@@ -81,31 +81,33 @@
 			} else {
 				convertedValue = value;
 			}
+			var result = true
 			var validators = params.v;
 			if (validators) {
 				var validatorFunction,validator;
-				try {
 					for (i=0;i<validators.length;i++) {
-						validator=validators[i];
-						validatorFunction = validator.f;
-						if (validatorFunction) {
-							validatorFunction(convertedValue,getLabel(validator,id), validator.p,validator.m);
+						try {
+							validator=validators[i];
+							validatorFunction = validator.f;
+							if (validatorFunction) {
+								validatorFunction(convertedValue,getLabel(validator,id), validator.p,validator.m);
+							}
+						} catch (e) {
+							e.severity=2;
+							rf.csv.sendMessage(id, e);
+							result = false;
 						}
 					}
-				} catch (e) {
-					e.severity=2;
-					rf.csv.sendMessage(id, e);
-					return false;
-				}
 			}
-			if(!params.da && params.a){
+			if(!result && !params.da && params.a){
 				params.a.call(element,event,id);
 			}
-			return true;
+			return result;
 		},
 	});
 	
-	/* convert all natural number formats
+	/*
+	 * convert all natural number formats
 	 * 
 	 */
 	var _convertNatural = function(value,label,msg,min,max,sample){
@@ -172,8 +174,8 @@
 	});
 	
 	var validateRange = function(value,label,params,msg) {
-		var isMinSet = typeof params.min === "number" ;//&& params.min >0;
-		var isMaxSet = typeof params.max === "number" ;//&& params.max >0;
+		var isMinSet = typeof params.min === "number" ;// && params.min >0;
+		var isMaxSet = typeof params.max === "number" ;// && params.max >0;
 
 		if (isMaxSet && value > params.max) {
 			throw rf.csv.interpolateMessage(msg,isMinSet?[params.min,params.max,label]:[params.max,label]);
@@ -250,6 +252,16 @@
 		"validateRequired": function (value,label,params,msg) {
 	        if (!value ) {
 	        	throw rf.csv.interpolateMessage(msg, [label]);
+	        }
+		},
+		"validateTrue": function (value,label,params,msg) {
+	        if (!value ) {
+	        	throw msg;
+	        }
+		},
+		"validateFalse": function (value,label,params,msg) {
+	        if (value ) {
+	        	throw msg;
 	        }
 		},
 		"validateMax": function (value,label,params,msg) {
