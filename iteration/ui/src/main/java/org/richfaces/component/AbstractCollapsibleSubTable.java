@@ -28,7 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 
-import org.richfaces.StateHolderList;
+import org.richfaces.StateHolderArray;
 import org.richfaces.cdk.annotations.Attribute;
 import org.richfaces.cdk.annotations.JsfComponent;
 import org.richfaces.cdk.annotations.JsfRenderer;
@@ -142,7 +142,7 @@ public abstract class AbstractCollapsibleSubTable extends UIDataTableBase implem
     }
     
     public void setIterationState(Object stateObject) {
-        StateHolderList stateHolderList = (StateHolderList) stateObject;
+        StateHolderArray stateHolderList = (StateHolderArray) stateObject;
         
         if (stateHolderList != null && !stateHolderList.isEmpty()) {
             super.setIterationState(stateHolderList.get(0));
@@ -154,7 +154,7 @@ public abstract class AbstractCollapsibleSubTable extends UIDataTableBase implem
     }
     
     public Object getIterationState() {
-        StateHolderList holderList = new StateHolderList();
+        StateHolderArray holderList = new StateHolderArray();
         
         holderList.add(super.getIterationState());
         holderList.add(getStateHelper().get(PropertyKeys.expanded));
