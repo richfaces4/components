@@ -245,7 +245,7 @@ public class ClientValidatorImpl extends AjaxBehavior implements ClientValidator
             }
             if(null != converter){
                 FacesConverterService converterService = ServiceTracker.getService(facesContext, FacesConverterService.class);
-                return converterService.getConverterDescription(facesContext, converter);
+                return converterService.getConverterDescription(facesContext, input, converter);
             } else {
                 return null;
             }
@@ -293,7 +293,7 @@ public class ClientValidatorImpl extends AjaxBehavior implements ClientValidator
                             validators.addAll(beanValidatorService.getConstrains(facesContext, valueExpression, getGroups()));
                         }
                     } else {
-                        validators.add(facesValidatorService.getValidatorDescription(facesContext, validator));
+                        validators.add(facesValidatorService.getValidatorDescription(facesContext, input, validator));
                     }
                 }
             }

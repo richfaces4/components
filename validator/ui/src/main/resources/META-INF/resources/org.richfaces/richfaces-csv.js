@@ -36,6 +36,12 @@
 		return value;
 	}
 	
+	var getLabel = function(component,id){
+		if(component.p){
+			return component.p.label || id;
+		}
+		return id;
+	}
 	
 	$.extend(rf.csv, {
 		RE_DIGITS: /^-?\d+$/,
@@ -63,9 +69,10 @@
 			var converter = params.c;
 			rf.csv.clearMessage(id);
 			if (converter) {
+				var label=getLabel(converter,id);
 				try {
 					if (converter.f)
-						convertedValue = converter.f(value,id,converter.p,converter.m);
+						convertedValue = converter.f(value,id,getLabel(converter,id),converter.m);
 				} catch (e){
 					e.severity=2;
 					rf.csv.sendMessage(id, e);
@@ -76,12 +83,13 @@
 			}
 			var validators = params.v;
 			if (validators) {
-				var validatorFunction;
+				var validatorFunction,validator;
 				try {
 					for (i=0;i<validators.length;i++) {
-						validatorFunction = validators[i].f;
+						validator=validators[i];
+						validatorFunction = validator.f;
 						if (validatorFunction) {
-							validatorFunction(convertedValue,id, validators[i].p,validators[i].m);
+							validatorFunction(convertedValue,getLabel(validator,id), validator.p,validator.m);
 						}
 					}
 				} catch (e) {
@@ -164,14 +172,14 @@
 	});
 	
 	var validateRange = function(value,label,params,msg) {
-		var isMinSet = typeof params.minimum === "number" ;//&& params.minimum >0;
-		var isMaxSet = typeof params.maximum === "number" ;//&& params.maximum >0;
+		var isMinSet = typeof params.min === "number" ;//&& params.min >0;
+		var isMaxSet = typeof params.max === "number" ;//&& params.max >0;
 
-		if (isMaxSet && value > params.maximum) {
-			throw rf.csv.interpolateMessage(msg,isMinSet?[params.minimum,params.maximum,label]:[params.maximum,label]);
+		if (isMaxSet && value > params.max) {
+			throw rf.csv.interpolateMessage(msg,isMinSet?[params.min,params.max,label]:[params.max,label]);
 		}
-		if (isMinSet && value < params.minimum) {
-			throw rf.csv.interpolateMessage(msg,isMaxSet?[params.minimum,params.maximum,label]:[params.minimum,label]);
+		if (isMinSet && value < params.min) {
+			throw rf.csv.interpolateMessage(msg,isMaxSet?[params.min,params.max,label]:[params.min,label]);
 		}
 	};
 
@@ -231,7 +239,7 @@
 		},
 		"validateSize": function (value,label,params,msg) {
 			var length = value?value.length:0;
-			validateRange(length,label,{maximum:params.max,minimum:params.min},msg);
+			validateRange(length,label,params,msg);
 		},
 		"validateRegex": function (value,label,params,msg) {
 			validateRegex(value,label,params.pattern,msg);
