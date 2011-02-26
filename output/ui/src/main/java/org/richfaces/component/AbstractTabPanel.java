@@ -25,7 +25,11 @@ package org.richfaces.component;
 
 import org.richfaces.HeaderAlignment;
 import org.richfaces.HeaderPosition;
-import org.richfaces.cdk.annotations.*;
+import org.richfaces.cdk.annotations.Attribute;
+import org.richfaces.cdk.annotations.JsfComponent;
+import org.richfaces.cdk.annotations.JsfRenderer;
+import org.richfaces.cdk.annotations.Tag;
+import org.richfaces.cdk.annotations.TagType;
 
 /**
  * @author akolonitsky
@@ -86,9 +90,6 @@ public abstract class AbstractTabPanel extends AbstractTogglePanel {
 
     @Attribute
     public abstract String getTabHeaderClass();
-
-    @Attribute(hidden = true)
-    public abstract boolean isBypassUpdates();
 
     @Attribute(hidden = true)
     public abstract boolean isLimitRender();
