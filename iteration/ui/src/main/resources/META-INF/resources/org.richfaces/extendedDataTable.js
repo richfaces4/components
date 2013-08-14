@@ -163,8 +163,8 @@
                 if (this.options['onready'] && typeof this.options['onready'] == 'function') {
                     richfaces.Event.bind(this.element, "rich:ready", this.options['onready']);
                 }
-                jQuery(document).ready(jQuery.proxy(this.initialize, this));
                 this.resizeEventName = "resize.rf.edt." + this.id;
+                jQuery(document).ready(jQuery.proxy(this.initialize, this));
                 this.activateResizeListener();
                 jQuery(this.scrollElement).bind("scroll", jQuery.proxy(this.updateScrollPosition, this));
                 this.bindHeaderHandlers();
@@ -847,11 +847,15 @@
             },
 
             activateResizeListener: function() {
-                $(window).on(this.resizeEventName, jQuery.proxy(this.updateLayout, this));
+                if (typeof this.resizeEventName !== "undefined") {
+                    $(window).on(this.resizeEventName, jQuery.proxy(this.updateLayout, this));
+                }
             },
 
             deActivateResizeListener: function() {
-                $(window).off(this.resizeEventName);
+                if (typeof this.resizeEventName !== "undefined") {
+                    $(window).off(this.resizeEventName);
+                }
             },
 
             contextMenuAttach: function (menu) {
