@@ -1,4 +1,4 @@
-package org.richfaces.integration.tabPanel;
+package org.richfaces.component.tabPanel;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -12,8 +12,9 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.richfaces.component.tabPanel.model.SimpleBean;
 import org.richfaces.integration.OutputDeployment;
-import org.richfaces.integration.tabPanel.model.SimpleBean;
+import org.richfaces.component.tabPanel.model.SimpleBean;
 import org.richfaces.shrinkwrap.descriptor.FaceletAsset;
 
 import java.net.URL;

@@ -1,4 +1,4 @@
-package org.richfaces.integration.tabPanel;
+package org.richfaces.component.tabPanel;
 
 import static org.jboss.arquillian.graphene.Graphene.guardXhr;
 
@@ -20,8 +20,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.richfaces.integration.OutputDeployment;
-import org.richfaces.integration.tabPanel.model.TabBean;
-import org.richfaces.integration.tabPanel.model.TabPanelBean;
+import org.richfaces.component.tabPanel.model.TabBean;
+import org.richfaces.component.tabPanel.model.TabPanelBean;
 import org.richfaces.shrinkwrap.descriptor.FaceletAsset;
 
 public class DynamicTabTestHelper {

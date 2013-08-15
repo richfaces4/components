@@ -1,4 +1,4 @@
-package org.richfaces.integration.tabPanel;
+package org.richfaces.component.tabPanel;
 
 import java.net.URL;
 import java.util.List;
@@ -15,13 +15,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.richfaces.integration.OutputDeployment;
-import org.richfaces.integration.tabPanel.model.TabBean;
-import org.richfaces.integration.tabPanel.model.TabPanelBean;
+import org.richfaces.component.tabPanel.model.TabBean;
+import org.richfaces.component.tabPanel.model.TabPanelBean;
 import org.richfaces.shrinkwrap.descriptor.FaceletAsset;
 
 @RunAsClient
 @RunWith(Arquillian.class)
-public class RepeatTabTest {
+public class ForEachTabTest {
 
     @Drone
     private WebDriver browser;
@@ -42,7 +42,7 @@ public class RepeatTabTest {
 
     @Deployment
     public static WebArchive createDeployment() {
-        OutputDeployment deployment = new OutputDeployment(RepeatTabTest.class);
+        OutputDeployment deployment = new OutputDeployment(ForEachTabTest.class);
         deployment.archive().addClass(TabBean.class);
         deployment.archive().addClass(TabPanelBean.class);
 
@@ -73,19 +73,19 @@ public class RepeatTabTest {
         p.body("    <rich:tab id='tab0' name='tab0' header='tab0 header'>content of tab 0</rich:tab>");
         p.body("    <rich:tab id='tab1' name='tab1' header='tab1 header' disabled='true'>content of tab 1</rich:tab>");
         p.body("    <rich:tab id='tab2' name='tab2' header='tab2 header'>content of tab 2</rich:tab>");
-        p.body("    <a4j:repeat id='repeat' value='#{tabPanelBean.tabBeans}' var='newTab'>");
-        p.body("        <rich:tab id='tab' name='#{newTab.tabName}'>");
+        p.body("    <c:forEach items='#{tabPanelBean.tabBeans}' var='newTab'>");
+        p.body("        <rich:tab id='#{newTab.tabId}' name='#{newTab.tabName}' render='tabPanel'>");
         p.body("            <f:facet name='header'>");
         p.body("                <h:outputText value='#{newTab.tabHeader} ' />");
         p.body("                <h:commandLink value='[x]' rendered='#{newTab.closable}' onclick='var event = arguments[0] || window.event; removeTab(\"#{newTab.tabId}\"); event.stopPropagation(); return false;' />");
         p.body("            </f:facet>");
         p.body("            #{newTab.tabContentText}");
         p.body("        </rich:tab>");
-        p.body("    </a4j:repeat>");
+        p.body("    </c:forEach>");
 
         p.body("</rich:tabPanel> ");
 
-        p.body("<a4j:jsFunction name='removeTab' action='#{tabPanelBean.removeTab}' render='tabPanel' >");
+        p.body("<a4j:jsFunction id='jsFunction' name='removeTab' action='#{tabPanelBean.removeTab}' render='myForm:tabPanel' >");
         p.body("    <a4j:param name='removeTabId'/>");
         p.body("</a4j:jsFunction>");
 
