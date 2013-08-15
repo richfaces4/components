@@ -29,6 +29,7 @@ public class OutputDeployment extends Deployment {
                     "org.richfaces.ui.common:richfaces-ui-common-ui",
                     "org.richfaces.ui.core:richfaces-ui-core-api",
                     "org.richfaces.ui.core:richfaces-ui-core-ui",
+                    "org.richfaces.ui.misc:richfaces-ui-misc-ui",
                     "org.richfaces.ui.output:richfaces-ui-output-api");
 
         } else {
@@ -41,6 +42,7 @@ public class OutputDeployment extends Deployment {
                     "org.richfaces.ui.common:richfaces-ui-common-ui:" + version,
                     "org.richfaces.ui.core:richfaces-ui-core-api:" + version,
                     "org.richfaces.ui.core:richfaces-ui-core-ui:" + version,
+                    "org.richfaces.ui.misc:richfaces-ui-misc-ui:" + version,
                     "org.richfaces.ui.output:richfaces-ui-output-api:" + version,
                     "org.richfaces.ui.output:richfaces-ui-output-ui:" + version);
         }
