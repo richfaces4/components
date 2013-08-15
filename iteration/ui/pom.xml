@@ -89,6 +89,9 @@
             </plugin>
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <suppressionsLocation>${project.basedir}/richfaces-suppressions.xml</suppressionsLocation>
+                </configuration>
             </plugin>
         </plugins>
     </build>
