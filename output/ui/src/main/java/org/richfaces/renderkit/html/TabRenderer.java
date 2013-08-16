@@ -42,6 +42,7 @@ import org.richfaces.component.AbstractTab;
 import org.richfaces.component.AbstractTabPanel;
 import org.richfaces.component.AbstractTogglePanelItemInterface;
 import org.richfaces.component.ComponentIterators;
+import org.richfaces.component.VisitChildrenRejectable;
 import org.richfaces.javascript.JavaScriptService;
 import org.richfaces.renderkit.HtmlConstants;
 
@@ -92,7 +93,7 @@ public class TabRenderer extends TogglePanelItemRenderer {
 
         AbstractTab tab = (AbstractTab) component;
 
-        if (tab.shouldProcess() && !tab.isDisabled()) {
+        if (tab.shouldVisitChildren() && !tab.isDisabled()) {
             super.doEncodeChildren(writer, context, tab);
         }
     }
@@ -108,7 +109,7 @@ public class TabRenderer extends TogglePanelItemRenderer {
 
     @Override
     protected void doEncodeEnd(ResponseWriter writer, FacesContext context, UIComponent component) throws IOException {
-        if (((AbstractTogglePanelItemInterface) component).shouldProcess()) {
+        if (((VisitChildrenRejectable) component).shouldVisitChildren()) {
             doEncodeItemEnd(writer, context, component);
         } else {
             encodePlaceHolder(context, component);
