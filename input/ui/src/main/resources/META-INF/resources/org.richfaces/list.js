@@ -70,7 +70,7 @@
 
     var bindFocusEventHandlers = function () {
         var focusEventHandlers = {};
-        focusEventHandlers[($.browser.opera || $.browser.mozilla ? "keypress" : "keydown") + this.namespace] = $.proxy(this.__keydownHandler, this);
+        focusEventHandlers[(($.browser.opera && $.browser.version < "12.10") || $.browser.mozilla ? "keypress" : "keydown") + this.namespace] = $.proxy(this.__keydownHandler, this);
         focusEventHandlers["blur" + this.namespace] = $.proxy(this.__blurHandler, this);
         focusEventHandlers["focus" + this.namespace] = $.proxy(this.__focusHandler, this);
         rf.Event.bind(this.focusKeeper, focusEventHandlers, this);

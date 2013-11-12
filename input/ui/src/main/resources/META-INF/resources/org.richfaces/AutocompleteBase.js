@@ -40,7 +40,7 @@
         inputEventHandlers["focus" + this.namespace] = onFocus;
         inputEventHandlers["blur" + this.namespace] = onBlur;
         inputEventHandlers["click" + this.namespace] = onClick;
-        inputEventHandlers[($.browser.opera || $.browser.mozilla ? "keypress" : "keydown") + this.namespace] = onKeyDown;
+        inputEventHandlers[(($.browser.opera && $.browser.version < "12.10") || $.browser.mozilla ? "keypress" : "keydown") + this.namespace] = onKeyDown;
         inputEventHandlers["change" + this.namespace] = function (event) {
             if (this.focused) {
                 event.stopPropagation()
