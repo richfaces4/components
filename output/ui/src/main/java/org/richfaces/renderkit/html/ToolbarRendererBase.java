@@ -108,12 +108,11 @@ public abstract class ToolbarRendererBase extends RendererBase {
         int result = 0;
         for (UIComponent component : components) {
             if (component instanceof AbstractToolbarGroup) {
-                result += component.getChildren().size();
+                result += ((AbstractToolbarGroup) component).getRenderedChildren().size();
             } else {
                 result++;
             }
         }
-
         return result;
     }
 
@@ -125,10 +124,9 @@ public abstract class ToolbarRendererBase extends RendererBase {
 
         for (UIComponent component : components) {
             if (component instanceof AbstractToolbarGroup) {
-                result += getCountSeparators((AbstractToolbarGroup) component, component.getChildren());
+                result += getCountSeparators((AbstractToolbarGroup) component, ((AbstractToolbarGroup) component).getRenderedChildren());
             }
         }
-
         return result;
     }
 
