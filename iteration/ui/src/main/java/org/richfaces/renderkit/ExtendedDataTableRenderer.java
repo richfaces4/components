@@ -92,7 +92,7 @@ public class ExtendedDataTableRenderer extends SelectionRenderer implements Meta
         }
     }
 
-    protected class Part {
+    protected final class Part {
         private PartName name;
         private List<UIComponent> columns;
 
@@ -140,7 +140,7 @@ public class ExtendedDataTableRenderer extends SelectionRenderer implements Meta
             }
         }
 
-        private List<UIComponent> getOrderedColumns(FacesContext context) {
+        protected List<UIComponent> getOrderedColumns(FacesContext context) {
             Map<String, UIComponent> columnsMap = new LinkedHashMap<String, UIComponent>();
             Iterator<UIComponent> iterator = table.columns();
             while (iterator.hasNext()) { // initialize a map of all the columns
