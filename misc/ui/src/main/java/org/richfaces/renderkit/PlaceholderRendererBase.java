@@ -12,9 +12,12 @@ import javax.faces.convert.Converter;
 import org.richfaces.component.AbstractPlaceholder;
 import org.richfaces.component.util.InputUtils;
 
-@ResourceDependencies({ @ResourceDependency(name = "base-component.reslib", library = "org.richfaces", target = "head"),
-        @ResourceDependency(name = "jquery.watermark.js", library = "org.richfaces", target = "head"),
-        @ResourceDependency(name = "placeholder.js", library = "org.richfaces", target = "head"),
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
+        @ResourceDependency(name = "jquery.watermark.js", library = "org.richfaces"),
+        @ResourceDependency(name = "placeholder.js", library = "org.richfaces"),
         @ResourceDependency(name = "placeholder.css", library = "org.richfaces") })
 public abstract class PlaceholderRendererBase extends RendererBase {
 
