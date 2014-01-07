@@ -41,7 +41,10 @@ import org.richfaces.component.UIDataTableBase;
  * @author Anton Belevich
  *
  */
-@ResourceDependencies({ @ResourceDependency(library = "org.richfaces", name = "ajax.reslib") })
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib") })
 public abstract class AbstractRowsRenderer extends RendererBase implements DataVisitor {
     private static final Map<String, ComponentAttribute> ROW_HANDLER_ATTRIBUTES = Collections
         .unmodifiableMap(ComponentAttribute.createMap(

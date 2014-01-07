@@ -47,7 +47,10 @@ import org.richfaces.renderkit.HtmlConstants;
  *
  */
 @JsfRenderer(type = "org.richfaces.QueueResourceComponentRenderer", family = UIOutput.COMPONENT_FAMILY)
-@ResourceDependency(library = "org.richfaces", name = "ajax.reslib")
+@ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib")
 public class QueueResourceComponentRenderer extends Renderer {
     private static final String FUNCTION_NAME = "RichFaces.queue.setQueueOptions";
 

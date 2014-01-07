@@ -47,7 +47,10 @@ import org.richfaces.log.RichfacesLogger;
 /**
  * @author Nick Belaevski Base class for rendering Queue
  */
-@ResourceDependency(library = "org.richfaces", name = "ajax.reslib")
+@ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib")
 @ListenersFor({ @ListenerFor(systemEventClass = PostAddToViewEvent.class),
         @ListenerFor(systemEventClass = PreRemoveFromViewEvent.class) })
 public abstract class QueueRendererBase extends Renderer implements ComponentSystemEventListener {

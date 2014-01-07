@@ -43,7 +43,10 @@ import com.google.common.base.Strings;
  * @author Anton Belevich
  */
 @JsfRenderer(type = "org.richfaces.CollapsibleSubTableTogglerRenderer", family = AbstractCollapsibleSubTableToggler.COMPONENT_FAMILY)
-@ResourceDependencies({ @ResourceDependency(library = "org.richfaces", name = "ajax.reslib"),
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib"),
         @ResourceDependency(name = "richfaces-event.js"),
         @ResourceDependency(library = "org.richfaces", name = "collapsible-subtable-toggler.js"),
         @ResourceDependency(library = "org.richfaces", name = "collapsible-subtable.ecss") })

@@ -23,6 +23,8 @@ package org.richfaces.resource;
 
 import static org.richfaces.application.configuration.ConfigurationServiceHelper.getBooleanConfigurationValue;
 
+import java.util.Collections;
+
 import javax.faces.context.FacesContext;
 
 import org.richfaces.application.CommonComponentsConfiguration;
@@ -30,24 +32,20 @@ import org.richfaces.application.CommonComponentsConfiguration;
 import com.google.common.collect.ImmutableList;
 
 /**
- * deprecated: the reslib was deprecated in RF-13314
- *
  * @author Nick Belaevski
+ *
  */
-@Deprecated
-public class AjaxResourceLibrary implements ResourceLibrary {
-    private static final ImmutableList<ResourceKey> AJAX_ONLY_KEYS = ImmutableList.of(
-        ResourceKey.create("jsf.js", "javax.faces"), ResourceKey.create("jquery.js", null),
-        ResourceKey.create("richfaces.js", null));
-    private static final ImmutableList<ResourceKey> AJAX_WITH_QUEUE_KEYS = ImmutableList.<ResourceKey>builder()
-        .addAll(AJAX_ONLY_KEYS).add(ResourceKey.create("richfaces-queue.js", null)).build();
+public class QueueResourceLibrary implements ResourceLibrary {
+
+    private static final ImmutableList<ResourceKey> QUEUE_RESOURCES = ImmutableList.<ResourceKey>builder()
+        .add(ResourceKey.create("richfaces-queue.js", null)).build();
 
     public Iterable<ResourceKey> getResources() {
         // TODO - initialize at creation.
         if (getBooleanConfigurationValue(FacesContext.getCurrentInstance(), CommonComponentsConfiguration.Items.queueEnabled)) {
-            return AJAX_WITH_QUEUE_KEYS;
+            return QUEUE_RESOURCES;
         }
 
-        return AJAX_ONLY_KEYS;
+        return Collections.emptyList();
     }
 }
