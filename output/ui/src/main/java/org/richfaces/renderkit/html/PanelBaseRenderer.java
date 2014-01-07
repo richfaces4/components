@@ -34,7 +34,10 @@ import org.richfaces.renderkit.RendererBase;
  * @author amarkhel
  * @since Jun 14, 2010
  */
-@ResourceDependencies({ @ResourceDependency(library = "org.richfaces", name = "base-component.reslib"),
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
         @ResourceDependency(library = "org.richfaces", name = "panel.ecss") })
 public class PanelBaseRenderer extends RendererBase {
     public PanelBaseRenderer() {

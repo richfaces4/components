@@ -43,7 +43,7 @@ import org.richfaces.renderkit.util.HtmlDimensions;
         @ResourceDependency(name = "jquery.js"),
         @ResourceDependency(name = "richfaces.js"),
         @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib"),
-        @ResourceDependency(library = "org.richfaces", name = "base-component.reslib"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
         @ResourceDependency(name = "richfaces-event.js"),
         @ResourceDependency(library = "org.richfaces", name = "inputBase.js"),
         @ResourceDependency(library = "org.richfaces", name = "inplaceBase.js"),

@@ -66,7 +66,7 @@ import org.richfaces.renderkit.RenderKitUtils;
         @ResourceDependency(name = "jquery.js"),
         @ResourceDependency(name = "richfaces.js"),
         @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib"),
-        @ResourceDependency(library = "org.richfaces", name = "base-component.reslib"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
         @ResourceDependency(name = "richfaces-event.js"),
         @ResourceDependency(library = "org.richfaces", name = "togglePanel.js"),
         @ResourceDependency(library = "org.richfaces", name = "tabPanel.js"),

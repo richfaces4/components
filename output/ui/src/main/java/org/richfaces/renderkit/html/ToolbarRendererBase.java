@@ -44,7 +44,10 @@ import org.richfaces.renderkit.RenderKitUtils.ScriptHashVariableWrapper;
 import org.richfaces.renderkit.RendererBase;
 import org.richfaces.renderkit.util.HtmlDimensions;
 
-@ResourceDependencies({ @ResourceDependency(library = "org.richfaces", name = "base-component.reslib"),
+@ResourceDependencies({ @ResourceDependency(library = "javax.faces", name = "jsf.js"),
+        @ResourceDependency(name = "jquery.js"),
+        @ResourceDependency(name = "richfaces.js"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
         @ResourceDependency(library = "org.richfaces", name = "toolbar.js"),
         @ResourceDependency(library = "org.richfaces", name = "toolbar.ecss") })
 public abstract class ToolbarRendererBase extends RendererBase {

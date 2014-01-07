@@ -35,7 +35,7 @@ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
         <cdk:resource-dependency name="jquery.js" />
         <cdk:resource-dependency name="richfaces.js" />
         <cdk:resource-dependency library="org.richfaces" name="richfaces-queue.reslib" />
-        <cdk:resource-dependency library="org.richfaces" name="base-component.reslib" />
+        <cdk:resource-dependency name="richfaces-base-component.js" />
         <cdk:resource-dependency name="richfaces-event.js" />
         <cdk:resource-dependency library="org.richfaces" name="fileupload.js" />
         <cdk:resource-dependency library="org.richfaces" name="fileupload.ecss" />

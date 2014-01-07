@@ -33,7 +33,7 @@ import javax.faces.context.FacesContext;
         @ResourceDependency(name = "jquery.js"),
         @ResourceDependency(name = "richfaces.js"),
         @ResourceDependency(library = "org.richfaces", name = "richfaces-queue.reslib"),
-        @ResourceDependency(library = "org.richfaces", name = "base-component.reslib"),
+        @ResourceDependency(name = "richfaces-base-component.js"),
         @ResourceDependency(name = "richfaces-event.js"), @ResourceDependency(name = "richfaces-utils.js"),
         @ResourceDependency(library = "org.richfaces", name = "editor.js"),
         @ResourceDependency(library = "org.richfaces.ckeditor", name = "ckeditor.js", target = "body") })
