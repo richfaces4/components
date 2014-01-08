@@ -279,7 +279,7 @@
                 this.__setInputValue(subValue);
             }
             if (subValue.length >= this.options.minChars) {
-                if ((this.options.ajaxMode || this.options.lazyClientMode) && oldValue != subValue) {
+                if ((this.options.ajaxMode || this.options.lazyClientMode) && (oldValue != subValue || (oldValue === '' && subValue === ''))) {
                     callAjax.call(this, event, callback);
                 }
             } else {
