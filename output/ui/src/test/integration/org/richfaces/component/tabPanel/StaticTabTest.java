@@ -8,7 +8,9 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -39,10 +41,16 @@ public class StaticTabTest {
     private WebElement tabPanel;
 
     @FindBy(className = "rf-tab-hdr-inact")
-    private List<WebElement> tabs;
+    private List<WebElement> inactiveHeaders;
+
+    @FindBy(className = "rf-tab-hdr-act")
+    private List<WebElement> activeHeaders;
 
     @FindBy(id = "out")
     private WebElement out;
+
+    @FindBy(id = "myForm:button")
+    private WebElement button;
 
     @FindBy(id = "myForm:inputText")
     private WebElement inputText;
@@ -52,12 +60,13 @@ public class StaticTabTest {
 
     private DynamicTabTestHelper tabTestHelper = new DynamicTabTestHelper();
 
-    @Deployment
+    @Deployment(testable = false)
     public static WebArchive createDeployment() {
         OutputDeployment deployment = new OutputDeployment(StaticTabTest.class);
         deployment.archive().addClass(SimpleBean.class);
 
         addIndexPage(deployment);
+        addHeaderButtonPage(deployment);
 
         WebArchive archive = deployment.getFinalArchive();
         return archive;
@@ -70,7 +79,7 @@ public class StaticTabTest {
     public void check_tab_switch() {
         browser.get(contextPath.toExternalForm() + "index.jsf");
 
-        guardAjax(tabs.get(1)).click();
+        guardAjax(inactiveHeaders.get(1)).click();
         Assert.assertTrue(out.getText().contains("begin"));
 //        Assert.assertTrue(out.getText().contains("tabpanel_complete"));
 //        Assert.assertTrue(out.getText().contains("beforedomupdate"));
@@ -96,8 +105,19 @@ public class StaticTabTest {
         browser.get(contextPath.toExternalForm() + "index.jsf");
 
         inputText.sendKeys("abcd");
-        guardAjax(tabs.get(1)).click();
+        guardAjax(inactiveHeaders.get(1)).click();
         Assert.assertEquals("abcd", outputText.getText());
+    }
+
+    /**
+     * {@link https://issues.jboss.org/browse/RF-13278}
+     */
+    @Test
+    public void check_header_button_render() {
+        browser.get(contextPath.toExternalForm() + "headerButton.jsf");
+        Assert.assertEquals("0 clicks", inactiveHeaders.get(1).findElement(By.className("rf-tab-lbl")).getText());
+        guardAjax(activeHeaders.get(0).findElement(By.className("button"))).click();
+        Assert.assertEquals("1 clicks", inactiveHeaders.get(1).findElement(By.className("rf-tab-lbl")).getText());
     }
 
 
@@ -132,6 +152,37 @@ public class StaticTabTest {
         p.body("</h:form>");
 
         deployment.archive().addAsWebResource(p, "index.xhtml");
+    }
+
+    private static void addHeaderButtonPage(OutputDeployment deployment) {
+        FaceletAsset p = new FaceletAsset();
+        p.xmlns("rich", "http://richfaces.org/output");
+        p.xmlns("a4j", "http://richfaces.org/a4j");
+        p.xmlns("c", "http://java.sun.com/jsp/jstl/core");
+        p.body("<h:form id='myForm'>");
+        p.body("<rich:tabPanel id='tabPanel' >");
+        p.body("    <rich:tab id='tab0' name='tab0'> "); // header='tab0 header' ");
+        p.body("        <f:facet name='header'> ");
+        p.body("            <a4j:commandLink value='click me' ");
+        p.body("                styleClass='button' ");
+        p.body("                action='#{simpleBean.incrementCount()}' ");
+        p.body("                render='label' ");
+        p.body("                oncomplete='return false;' ");
+        p.body("                execute='@this' /> ");
+        p.body("        </f:facet> ");
+        p.body("        content of tab 1");
+        p.body("    </rich:tab>");
+        p.body("    <rich:tab id='tab1'>");
+        p.body("        <f:facet name='header'> ");
+        p.body("            <h:outputText id='label' value='#{simpleBean.count} clicks' /> ");
+        p.body("        </f:facet> ");
+        p.body("        content of tab 2");
+        p.body("        <h:outputText id = 'outputText' value='#{simpleBean.string}' />");
+        p.body("    </rich:tab>");
+        p.body("</rich:tabPanel> ");
+        p.body("</h:form>");
+
+        deployment.archive().addAsWebResource(p, "headerButton.xhtml");
     }
 
 }
