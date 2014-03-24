@@ -22,6 +22,7 @@
 package org.richfaces.component;
 
 import com.google.common.base.Strings;
+
 import org.richfaces.application.FacesMessages;
 import org.richfaces.application.MessageFactory;
 import org.richfaces.application.ServiceTracker;
@@ -48,6 +49,8 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.ActionSource2;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UpdateModelException;
@@ -57,12 +60,14 @@ import javax.faces.component.visit.VisitHint;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PostValidateEvent;
 import javax.faces.event.PreValidateEvent;
+
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -544,8 +549,9 @@ public abstract class AbstractTogglePanel extends UIOutput implements AbstractDi
     public void broadcast(FacesEvent event) throws AbortProcessingException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (event instanceof ItemChangeEvent) {
-            setValue(((ItemChangeEvent) event).getNewItemName());
-            setSubmittedActiveItem(null);
+            String newItemName = ((ItemChangeEvent) event).getNewItemName();
+            setValue(newItemName);
+            setSubmittedActiveItem(newItemName);
             if (event.getPhaseId() == PhaseId.UPDATE_MODEL_VALUES) {
                 try {
                     updateModel(facesContext);
@@ -558,6 +564,29 @@ public abstract class AbstractTogglePanel extends UIOutput implements AbstractDi
             }
         }
         super.broadcast(event);
+        //broadcast event to the children that are activated now so that action would be executed on that item
+        Iterator<UIComponent> iterator = getChildren().iterator();
+        String activeItem = getActiveItem();
+        while (iterator.hasNext()) {
+            Object child = iterator.next();
+            if (child instanceof ActionSource2 && child instanceof AbstractTogglePanelTitledItem && child instanceof UICommand) {
+                String name = ((AbstractTogglePanelTitledItem) child).getName();
+                //active item is determined by the name
+                if (name.equals(activeItem)) {
+                    //child needs to be UICommand to broadcast event
+                    UICommand childCommand = (UICommand) child;
+                    ActionEvent actionEvent = new ActionEvent(childCommand);
+                    //if the immediate attribute is set than event should be broadcasted on the second phase APPLY_REQUEST_VALUES
+                    //in other case it should be queued to be executed on 
+                    if(isImmediate()){
+                        childCommand.broadcast(actionEvent);
+                    } else {
+                        actionEvent.queue();
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     // -------------------------------------------------- Panel Items Managing
