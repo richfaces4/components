@@ -163,6 +163,7 @@
 
         var disconnect = function() {
             _$.atmosphere.unsubscribe();
+            lastMessageNumber = -1;
         };
 
         return {
