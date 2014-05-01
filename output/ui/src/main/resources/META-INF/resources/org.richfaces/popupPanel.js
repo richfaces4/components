@@ -554,19 +554,21 @@
                 newSize += diff.deltaWidth || 0;
 
 
-                if (newSize >= this.currentMinWidth || this.options.autosized) {
-                    cssHashWH.width = newSize + 'px';
-                    shadowHashWH.width = newSize + 'px';
-                    contentHashWH.width = newSize - scrollerWidth + 'px';
-                    scrollerHashWH.width = newSize - scrollerWidth + 'px';
-                } else {
-                    cssHashWH.width = this.currentMinWidth + 'px';
-                    shadowHashWH.width = this.currentMinWidth + 'px';
-                    contentHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
-                    scrollerHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
-                    vetoes.vx = oldWidthSize - this.currentMinWidth;
+                if (!this.options.autosized) {
+                    if (newSize >= this.currentMinWidth) {
+                        cssHashWH.width = newSize + 'px';
+                        shadowHashWH.width = newSize + 'px';
+                        contentHashWH.width = newSize - scrollerWidth + 'px';
+                        scrollerHashWH.width = newSize - scrollerWidth + 'px';
+                    } else {
+                        cssHashWH.width = this.currentMinWidth + 'px';
+                        shadowHashWH.width = this.currentMinWidth + 'px';
+                        contentHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
+                        scrollerHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
+                        vetoes.vx = oldWidthSize - this.currentMinWidth;
 
-                    vetoes.x = true;
+                        vetoes.x = true;
+                    }
                 }
 
                 if (newSize > this.options.maxWidth) {
