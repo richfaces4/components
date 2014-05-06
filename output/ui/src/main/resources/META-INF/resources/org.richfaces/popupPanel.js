@@ -90,6 +90,7 @@
             $(richfaces.getDomElement(id + "_header")).css('cursor', 'default');
         }
 
+        this.cdiv.resize($.proxy(this.resizeListener, this));
     };
 
     richfaces.BaseComponent.extend(richfaces.ui.PopupPanel);
@@ -304,16 +305,28 @@
 
                     }
 
-                    if (options.width && options.width != -1) {
-                        if (this.currentMinWidth > options.width) {
-                            options.width = this.currentMinWidth;
+                    if (options.width && options.width != -1 || options.autosized) {
+                        var width;
+                        if (options.autosized) {
+                            width = this.getStyle(this.getContentElement(), "width");
+                            if (this.currentMinWidth > width) {
+                                width = this.currentMinWidth;
+                            }
+                            if (width > this.maxWidth) {
+                                width = this.maxWidth;
+                            }
+                        } else {
+                            if (this.currentMinWidth > options.width) {
+                                options.width = this.currentMinWidth;
+                            }
+                            if (options.width > this.maxWidth) {
+                                options.width = this.maxWidth;
+                            }
+                            width = options.width;
                         }
-                        if (options.width > this.maxWidth) {
-                            options.width = this.maxWidth;
-                        }
-                        $(richfaces.getDomElement(eContentElt)).css('width', options.width + (/px/.test(options.width) ? '' : 'px'));
-                        this.shadowDiv.css('width', options.width + (/px/.test(options.width) ? '' : 'px'));
-                        this.scrollerDiv.css('width', options.width + (/px/.test(options.width) ? '' : 'px'));
+                        $(richfaces.getDomElement(eContentElt)).css('width', width + (/px/.test(width) ? '' : 'px'));
+                        this.shadowDiv.css('width', width + (/px/.test(width) ? '' : 'px'));
+                        this.scrollerDiv.css('width', width + (/px/.test(width) ? '' : 'px'));
                     }
 
                     if (options.height && options.height != -1) {
@@ -535,6 +548,10 @@
                 return parseInt($(richfaces.getDomElement(elt)).css(name).replace("px", ""), 10);
             },
 
+            resizeListener: function(event, diff) {
+                this.doResizeOrMove({});
+            },
+
             doResizeOrMove: function(diff) {
                 var vetoes = {};
                 var shadowHash = {};
@@ -548,13 +565,17 @@
                 var scrollerWidth = 0;
                 var eContentElt = this.getContentElement();
 
+                if (this.options.autosized) {
+                    this.resetWidth();
+                }
+
                 newSize = this.getStyle(eContentElt, "width");
 
                 var oldWidthSize = newSize;
                 newSize += diff.deltaWidth || 0;
 
 
-                if (newSize >= this.currentMinWidth || this.options.autosized) {
+                if (newSize >= this.currentMinWidth) {
                     cssHashWH.width = newSize + 'px';
                     shadowHashWH.width = newSize + 'px';
                     contentHashWH.width = newSize - scrollerWidth + 'px';
@@ -564,21 +585,23 @@
                     shadowHashWH.width = this.currentMinWidth + 'px';
                     contentHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
                     scrollerHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
-                    vetoes.vx = oldWidthSize - this.currentMinWidth;
 
-                    vetoes.x = true;
+                    if (diff.deltaWidth) {
+                        vetoes.vx = oldWidthSize - this.currentMinWidth;
+                        vetoes.x = true;
+                    }
                 }
 
                 if (newSize > this.options.maxWidth) {
-                    if (diff.deltaWidth) {
-                        cssHashWH.width = this.currentMaxWidth + 'px';
-                        shadowHashWH.width = this.currentMaxWidth + 'px';
-                        contentHashWH.width = this.currentMaxWidth - scrollerWidth + 'px';
-                        scrollerHashWH.width = this.currentMaxWidth - scrollerWidth + 'px';
-                        vetoes.vx = oldWidthSize - this.currentMaxWidth;
-                    }
+                    cssHashWH.width = this.options.maxWidth + 'px';
+                    shadowHashWH.width = this.options.maxWidth + 'px';
+                    contentHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
+                    scrollerHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
 
-                    vetoes.x = true;
+                    if (diff.deltaWidth) {
+                        vetoes.vx = oldWidthSize - this.options.maxWidth;
+                        vetoes.x = true;
+                    }
                 }
 
                 if (vetoes.vx && diff.deltaX) {
@@ -685,6 +708,16 @@
                 }
 
                 return vetoes;
+            },
+
+            resetWidth: function() {
+                this.getContentElement().css('width', '');
+                this.scrollerDiv.css('width', '');
+                if (this.eIframe) {
+                    this.eIframe.css('width', '');
+                }
+                this.shadowDiv.css('width', '');
+                $(this.cdiv).css('width', '');
             },
 
             setSize : function (width, height) {
