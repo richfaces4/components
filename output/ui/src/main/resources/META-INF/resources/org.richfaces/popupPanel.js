@@ -329,17 +329,29 @@
                         this.scrollerDiv.css('width', width + (/px/.test(width) ? '' : 'px'));
                     }
 
-                    if (options.height && options.height != -1) {
-                        if (this.currentMinHeight > options.height) {
-                            options.height = this.currentMinHeight;
+                    if (options.height && options.height != -1 || options.autosized) {
+                        var height;
+                        if (options.autosized) {
+                            height = this.getStyle(this.getContentElement(), "height");
+                            if (this.currentMinHeight > height) {
+                                height = this.currentMinHeight;
+                            }
+                            if (height > this.maxHeight) {
+                                height = this.maxHeight;
+                            }
+                        } else {
+                            if (this.currentMinHeight > options.height) {
+                                options.height = this.currentMinHeight;
+                            }
+                            if (options.height > this.maxHeight) {
+                                options.height = this.maxHeight;
+                            }
+                            height = options.height;
                         }
-                        if (options.height > this.maxHeight) {
-                            options.height = this.maxHeight;
-                        }
-                        $(richfaces.getDomElement(eContentElt)).css('height', options.height + (/px/.test(options.height) ? '' : 'px'));
+                        $(richfaces.getDomElement(eContentElt)).css('height', height + (/px/.test(height) ? '' : 'px'));
                         var headerHeight = $(richfaces.getDomElement(this.markerId + "_header")) ? $(richfaces.getDomElement(this.markerId + "_header")).innerHeight() : 0;
-                        this.shadowDiv.css('height', options.height + (/px/.test(options.height) ? '' : 'px'));
-                        this.scrollerDiv.css('height', options.height - headerHeight + (/px/.test(options.height) ? '' : 'px'));
+                        this.shadowDiv.css('height', height + (/px/.test(height) ? '' : 'px'));
+                        this.scrollerDiv.css('height', height - headerHeight + (/px/.test(height) ? '' : 'px'));
                     }
 
                     var eIframe;
@@ -567,6 +579,7 @@
 
                 if (this.options.autosized) {
                     this.resetWidth();
+                    this.resetHeight();
                 }
 
                 newSize = this.getStyle(eContentElt, "width");
@@ -626,32 +639,30 @@
                 var oldHeightSize = newSize;
                 newSize += diff.deltaHeight || 0;
 
-                if (newSize >= this.currentMinHeight || this.options.autosized) {
-                    if (diff.deltaHeight) {
-                        cssHashWH.height = newSize + 'px';
-                        shadowHashWH.height = newSize + 'px';
-                        scrollerHashWH.height = newSize - scrollerHeight + 'px';
-                    }
+                if (newSize >= this.currentMinHeight) {
+                    cssHashWH.height = newSize + 'px';
+                    shadowHashWH.height = newSize + 'px';
+                    scrollerHashWH.height = newSize - scrollerHeight + 'px';
                 } else {
-                    if (diff.deltaHeight) {
-                        cssHashWH.height = this.currentMinHeight + 'px';
-                        shadowHashWH.height = this.currentMinHeight + 'px';
-                        scrollerHashWH.height = this.currentMinHeight - scrollerHeight + 'px';
-                        vetoes.vy = oldHeightSize - this.currentMinHeight;
-                    }
+                    cssHashWH.height = this.currentMinHeight + 'px';
+                    shadowHashWH.height = this.currentMinHeight + 'px';
+                    scrollerHashWH.height = this.currentMinHeight - scrollerHeight + 'px';
 
-                    vetoes.y = true;
+                    if (diff.deltaHeight) {
+                        vetoes.vy = oldHeightSize - this.currentMinHeight;
+                        vetoes.y = true;
+                    }
                 }
 
                 if (newSize > this.options.maxHeight) {
-                    if (diff.deltaHeight) {
-                        cssHashWH.height = this.currentMaxHeight + 'px';
-                        shadowHashWH.height = this.currentMaxHeight + 'px';
-                        scrollerHashWH.height = this.currentMaxHeight - scrollerHeight + 'px';
-                        vetoes.vy = oldHeightSize - this.currentMaxHeight;
-                    }
+                    cssHashWH.height = this.options.maxHeight + 'px';
+                    shadowHashWH.height = this.options.maxHeight + 'px';
+                    scrollerHashWH.height = this.options.maxHeight - scrollerHeight + 'px';
 
-                    vetoes.y = true;
+                    if (diff.deltaHeight) {
+                        vetoes.vy = oldHeightSize - this.options.maxHeight;
+                        vetoes.y = true;
+                    }
                 }
 
                 if (vetoes.vy && diff.deltaY) {
@@ -663,16 +674,11 @@
                         diff.deltaY = vetoes.vy;
                     }
 
-                }
-                if (diff.deltaY && (vetoes.vy || !vetoes.y)) {
-                    if (vetoes.vy) {
-                        diff.deltaY = vetoes.vy;
-                    }
-
                     var newTopPos = this.getStyle(eCdiv, "top");
                     newTopPos += diff.deltaY;
                     cssHash.top = newTopPos + 'px';
                 }
+
                 eContentElt.css(cssHashWH);
                 this.scrollerDiv.css(scrollerHashWH);
                 if (this.eIframe) {
@@ -718,6 +724,16 @@
                 }
                 this.shadowDiv.css('width', '');
                 $(this.cdiv).css('width', '');
+            },
+
+            resetHeight: function() {
+                this.getContentElement().css('height', '');
+                this.scrollerDiv.css('height', '');
+                if (this.eIframe) {
+                    this.eIframe.css('height', '');
+                }
+                this.shadowDiv.css('height', '');
+                $(this.cdiv).css('height', '');
             },
 
             setSize : function (width, height) {
