@@ -577,43 +577,48 @@
                 var scrollerWidth = 0;
                 var eContentElt = this.getContentElement();
 
-                if (this.options.autosized) {
-                    this.resetWidth();
-                    this.resetHeight();
-                }
+                var isMove = (diff !== richfaces.ui.PopupPanel.Sizer.Diff.EMPTY && (diff.deltaX || diff.deltaY));
 
-                newSize = this.getStyle(eContentElt, "width");
+                var isResize = (diff !== richfaces.ui.PopupPanel.Sizer.Diff.EMPTY && !isMove);
 
-                var oldWidthSize = newSize;
-                newSize += diff.deltaWidth || 0;
-
-
-                if (newSize >= this.currentMinWidth) {
-                    cssHashWH.width = newSize + 'px';
-                    shadowHashWH.width = newSize + 'px';
-                    contentHashWH.width = newSize - scrollerWidth + 'px';
-                    scrollerHashWH.width = newSize - scrollerWidth + 'px';
-                } else {
-                    cssHashWH.width = this.currentMinWidth + 'px';
-                    shadowHashWH.width = this.currentMinWidth + 'px';
-                    contentHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
-                    scrollerHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
-
-                    if (diff.deltaWidth) {
-                        vetoes.vx = oldWidthSize - this.currentMinWidth;
-                        vetoes.x = true;
+                if (isResize) {
+                    if (this.options.autosized) {
+                        this.resetWidth();
+                        this.resetHeight();
                     }
-                }
 
-                if (newSize > this.options.maxWidth) {
-                    cssHashWH.width = this.options.maxWidth + 'px';
-                    shadowHashWH.width = this.options.maxWidth + 'px';
-                    contentHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
-                    scrollerHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
+                    newSize = this.getStyle(eContentElt, "width");
 
-                    if (diff.deltaWidth) {
-                        vetoes.vx = oldWidthSize - this.options.maxWidth;
-                        vetoes.x = true;
+                    var oldWidthSize = newSize;
+                    newSize += diff.deltaWidth || 0;
+
+                    if (newSize >= this.currentMinWidth) {
+                        cssHashWH.width = newSize + 'px';
+                        shadowHashWH.width = newSize + 'px';
+                        contentHashWH.width = newSize - scrollerWidth + 'px';
+                        scrollerHashWH.width = newSize - scrollerWidth + 'px';
+                    } else {
+                        cssHashWH.width = this.currentMinWidth + 'px';
+                        shadowHashWH.width = this.currentMinWidth + 'px';
+                        contentHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
+                        scrollerHashWH.width = this.currentMinWidth - scrollerWidth + 'px';
+
+                        if (diff.deltaWidth) {
+                            vetoes.vx = oldWidthSize - this.currentMinWidth;
+                            vetoes.x = true;
+                        }
+                    }
+
+                    if (newSize > this.options.maxWidth) {
+                        cssHashWH.width = this.options.maxWidth + 'px';
+                        shadowHashWH.width = this.options.maxWidth + 'px';
+                        contentHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
+                        scrollerHashWH.width = this.options.maxWidth - scrollerWidth + 'px';
+
+                        if (diff.deltaWidth) {
+                            vetoes.vx = oldWidthSize - this.options.maxWidth;
+                            vetoes.x = true;
+                        }
                     }
                 }
 
@@ -634,34 +639,36 @@
 
                 }
 
-                newSize = this.getStyle(eContentElt, "height");
+                if (isResize) {
+                    newSize = this.getStyle(eContentElt, "height");
 
-                var oldHeightSize = newSize;
-                newSize += diff.deltaHeight || 0;
+                    var oldHeightSize = newSize;
+                    newSize += diff.deltaHeight || 0;
 
-                if (newSize >= this.currentMinHeight) {
-                    cssHashWH.height = newSize + 'px';
-                    shadowHashWH.height = newSize + 'px';
-                    scrollerHashWH.height = newSize - scrollerHeight + 'px';
-                } else {
-                    cssHashWH.height = this.currentMinHeight + 'px';
-                    shadowHashWH.height = this.currentMinHeight + 'px';
-                    scrollerHashWH.height = this.currentMinHeight - scrollerHeight + 'px';
+                    if (newSize >= this.currentMinHeight) {
+                        cssHashWH.height = newSize + 'px';
+                        shadowHashWH.height = newSize + 'px';
+                        scrollerHashWH.height = newSize - scrollerHeight + 'px';
+                    } else {
+                        cssHashWH.height = this.currentMinHeight + 'px';
+                        shadowHashWH.height = this.currentMinHeight + 'px';
+                        scrollerHashWH.height = this.currentMinHeight - scrollerHeight + 'px';
 
-                    if (diff.deltaHeight) {
-                        vetoes.vy = oldHeightSize - this.currentMinHeight;
-                        vetoes.y = true;
+                        if (diff.deltaHeight) {
+                            vetoes.vy = oldHeightSize - this.currentMinHeight;
+                            vetoes.y = true;
+                        }
                     }
-                }
 
-                if (newSize > this.options.maxHeight) {
-                    cssHashWH.height = this.options.maxHeight + 'px';
-                    shadowHashWH.height = this.options.maxHeight + 'px';
-                    scrollerHashWH.height = this.options.maxHeight - scrollerHeight + 'px';
+                    if (newSize > this.options.maxHeight) {
+                        cssHashWH.height = this.options.maxHeight + 'px';
+                        shadowHashWH.height = this.options.maxHeight + 'px';
+                        scrollerHashWH.height = this.options.maxHeight - scrollerHeight + 'px';
 
-                    if (diff.deltaHeight) {
-                        vetoes.vy = oldHeightSize - this.options.maxHeight;
-                        vetoes.y = true;
+                        if (diff.deltaHeight) {
+                            vetoes.vy = oldHeightSize - this.options.maxHeight;
+                            vetoes.y = true;
+                        }
                     }
                 }
 
