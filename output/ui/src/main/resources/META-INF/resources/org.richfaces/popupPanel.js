@@ -563,7 +563,7 @@
             },
 
             resizeListener: function(event, diff) {
-                this.doResizeOrMove({});
+                this.doResizeOrMove(richfaces.ui.PopupPanel.Sizer.Diff.EMPTY);
             },
 
             doResizeOrMove: function(diff) {
@@ -579,11 +579,9 @@
                 var scrollerWidth = 0;
                 var eContentElt = this.getContentElement();
 
-                var isMove = (diff !== richfaces.ui.PopupPanel.Sizer.Diff.EMPTY && (diff.deltaX || diff.deltaY));
+                var doResize = diff === richfaces.ui.PopupPanel.Sizer.Diff.EMPTY || diff.deltaWidth || diff.deltaHeight;
 
-                var isResize = (diff !== richfaces.ui.PopupPanel.Sizer.Diff.EMPTY && !isMove);
-
-                if (isResize) {
+                if (doResize) {
                     if (this.options.autosized) {
                         this.resetWidth();
                         this.resetHeight();
@@ -641,7 +639,7 @@
 
                 }
 
-                if (isResize) {
+                if (doResize) {
                     newSize = this.getStyle(eContentElt, "height");
 
                     var oldHeightSize = newSize;
