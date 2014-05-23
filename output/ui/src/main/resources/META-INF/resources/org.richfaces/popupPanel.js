@@ -267,7 +267,6 @@
                         }
                     }
 
-
                     var options = {};
                     this.userOptions = {};
                     $.extend(options, this.options);
@@ -276,6 +275,9 @@
                         $.extend(options, opts);
                         $.extend(this.userOptions, opts);
                     }
+
+                    // reset dimensions
+                    this.doResizeOrMove(richfaces.ui.PopupPanel.Sizer.Diff.EMPTY);
 
                     this.currentMinHeight = this.getMinimumSize(this.__getParsedOption(options, 'minHeight'));
                     this.currentMinWidth = this.getMinimumSize(this.__getParsedOption(options, 'minWidth'));
@@ -554,7 +556,11 @@
                     }
 
                     this.shown = false;
-                    this.invokeEvent("hide", hideEvent, null, element)
+                    this.invokeEvent("hide", hideEvent, null, element);
+
+                    // reset position for proper resizing
+                    this.setLeft(10);
+                    this.setTop(10);
                 }
             },
 
