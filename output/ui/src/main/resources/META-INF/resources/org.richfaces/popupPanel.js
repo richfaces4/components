@@ -277,7 +277,46 @@
                     }
 
                     // reset dimensions
-                    this.doResizeOrMove(richfaces.ui.PopupPanel.Sizer.Diff.EMPTY);
+                    if (this.options.autosized) {
+                        if (options.left) {
+                            var _left;
+                            if (options.left != "auto") {
+                                _left = parseInt(options.left, 10);
+                            } else {
+                                var cw = this.__calculateWindowWidth();
+                                var _width = this.width();
+                                if (cw >= _width) {
+                                    _left = (cw - _width) / 2;
+                                } else {
+                                    _left = 0;
+                                }
+                            }
+
+                            this.setLeft(Math.round(_left));
+                            $(this.shadowDiv).css("left", this.shadowDepth);
+                        }
+
+                        if (options.top) {
+                            var _top;
+                            if (options.top != "auto") {
+                                _top = parseInt(options.top, 10);
+                            } else {
+                                var ch = this.__calculateWindowHeight();
+                                var _height = this.height();
+                                if (ch >= _height) {
+                                    _top = (ch - _height) / 2;
+                                } else {
+                                    _top = 0;
+                                }
+                            }
+
+                            this.setTop(Math.round(_top));
+                            $(this.shadowDiv).css("top", this.shadowDepth);
+                            $(this.shadowDiv).css("bottom", -this.shadowDepth);
+                        }
+
+                        this.doResizeOrMove(richfaces.ui.PopupPanel.Sizer.Diff.EMPTY);
+                    }
 
                     this.currentMinHeight = this.getMinimumSize(this.__getParsedOption(options, 'minHeight'));
                     this.currentMinWidth = this.getMinimumSize(this.__getParsedOption(options, 'minWidth'));
