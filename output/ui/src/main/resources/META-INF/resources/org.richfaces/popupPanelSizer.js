@@ -92,9 +92,7 @@
 
     };
 
-    richfaces.ui.PopupPanel.Sizer.Diff.EMPTY = function() {
-        return new richfaces.ui.PopupPanel.Sizer.Diff(0, 0, 0, 0);
-    },
+    richfaces.ui.PopupPanel.Sizer.Diff.EMPTY = new richfaces.ui.PopupPanel.Sizer.Diff(0, 0, 0, 0),
 
         richfaces.ui.PopupPanel.Sizer.N = function() {
 
