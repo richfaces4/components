@@ -190,12 +190,13 @@
 
             __submit: function() {
                 var encodedURLInputs = this.form.children("input[name='javax.faces.encodedURL']");
-                var originalAction = encodedURLInputs.length > 0 ? encodedURLInputs.val() : this.form.attr("action");
+                var originalAction = this.form.attr("action");
+                var uploadAction = encodedURLInputs.length > 0 ? encodedURLInputs.val() : originalAction;
                 var originalEncoding = this.form.attr("encoding");
                 var originalEnctype = this.form.attr("enctype");
                 try {
-                    var delimiter = originalAction.indexOf("?") == -1 ? "?" : "&";
-                    this.form.attr("action", originalAction + delimiter + UID + "=" + this.loadableItem.uid);
+                    var delimiter = uploadAction.indexOf("?") == -1 ? "?" : "&";
+                    this.form.attr("action", uploadAction + delimiter + UID + "=" + this.loadableItem.uid);
                     this.form.attr("encoding", "multipart/form-data");
                     this.form.attr("enctype", "multipart/form-data");
                     richfaces.submitForm(this.form, {"org.richfaces.ajax.component": this.id}, this.id);
